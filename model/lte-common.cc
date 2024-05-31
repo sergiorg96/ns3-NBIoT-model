@@ -335,18 +335,21 @@ EutranMeasurementMapping::ActualA3Offset2IeValue(double a3OffsetDb)
     return ieValue;
 }
 
+// Función que comprueba el que el valor de NRSRP del UE se encuentra dentro del rango permitido.
+// Se ha modificado el valor de referencia de LTE de -70 a -78 al permitir NB-IoT una mayor cobertura (-156dBm)
+
 double
 EutranMeasurementMapping::IeValue2ActualQRxLevMin(int8_t qRxLevMinIeValue)
 {
-    if ((qRxLevMinIeValue < -70) || (qRxLevMinIeValue > -22))
+    if ((qRxLevMinIeValue < -78) || (qRxLevMinIeValue > -22))
     {
         NS_FATAL_ERROR("The value " << (int16_t)qRxLevMinIeValue
-                                    << " is out of the allowed range (-70..-22)"
+                                    << " is out of the allowed range (-78..-22)"
                                     << " for Q-RxLevMin IE value");
     }
 
     double actual = static_cast<double>(qRxLevMinIeValue) * 2;
-    NS_ASSERT(actual >= -140.0);
+    NS_ASSERT(actual >= -156.0);
     NS_ASSERT(actual <= -44.0);
     return actual;
 }

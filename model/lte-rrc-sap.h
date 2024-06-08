@@ -270,12 +270,66 @@ class LteRrcSap
             0}; ///< Number of times that the UE detects T300 expiry on the same cell
     };
 
+    // Añadido para NB-IoT
+    /// Estructura CE0
+    struct EnhancementCoverageLevel_0_Info{
+        int numRepetitionsPerPreambleAttempt_r13;
+        int maxNumPreambleAttempt_r13;
+        int periodicity_r13;
+        int startTime_r13;
+        int npdcch_numRepetitions_RA_r13;
+        int npdcch_StartSF_CSS_RA_r13;
+    };
+    /// Estructura CE1
+    struct EnhancementCoverageLevel_1_Info{
+        int numRepetitionsPerPreambleAttempt_r13;
+        int maxNumPreambleAttempt_r13;
+        int periodicity_r13;
+        int startTime_r13;
+        int npdcch_numRepetitions_RA_r13;
+        int npdcch_StartSF_CSS_RA_r13;
+    };
+    /// Estructura CE2
+    struct EnhancementCoverageLevel_2_Info{
+        int numRepetitionsPerPreambleAttempt_r13;
+        int maxNumPreambleAttempt_r13;
+        int periodicity_r13;
+        int startTime_r13;
+        int npdcch_numRepetitions_RA_r13;
+        int npdcch_StartSF_CSS_RA_r13;
+    };
+    /// Estructura NPRACH_ParametersList_NB_r13
+    struct NPRACH_ParametersList_NB_r13{
+        EnhancementCoverageLevel_0_Info CE_0_Info;
+        EnhancementCoverageLevel_1_Info CE_1_Info;
+        EnhancementCoverageLevel_2_Info CE_2_Info;
+    };
+    /// Estructura RSRP_ThresholdsNPRACH_InfoList_NB_r13
+    struct RSRP_ThresholdsNPRACH_InfoList_NB_r13{
+        int NRSRP_thresholds_first;
+        int NRSRP_thresholds_second;
+    };
+    /// Estructura NPRACH_ConfigSIB_NB_r13
+    struct NPRACH_ConfigSIB_NB_r13{
+        enum nprach_CP_Length_r13{us66dot7, us266dot7};
+        RSRP_ThresholdsNPRACH_InfoList_NB_r13 rsrp_ThresholdsPrachInfoList_r13;
+        NPRACH_ParametersList_NB_r13 NPRACH_ParametersList_r13;
+    ;
+    /// Estructura NprachConfig
+    struct NprachConfig{
+        NPRACH_ConfigSIB_NB_r13 nprach_ConfigSIB_NB_r13;
+    };
+    // Fin añadido para NB-IoT
+
     /// RachConfigCommon structure
     struct RachConfigCommon
     {
         PreambleInfo preambleInfo;           ///< preamble info
         RaSupervisionInfo raSupervisionInfo; ///< RA supervision info
         TxFailParam txFailParam;             ///< txFailParams
+
+        // Añadido para NB-IoT
+        NprachConfig nprachConfig;           ///< Estructura NB-IoT SIB2 modificada
     };
 
     /// RadioResourceConfigCommon structure

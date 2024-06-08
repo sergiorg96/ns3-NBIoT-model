@@ -154,6 +154,15 @@ class LteUeMac : public Object
      */
     void DoStartContentionBasedRandomAccessProcedure();
     /**
+     * Función de inicio del procedimiento de acceso aleatorio basado en contención para NB-IoT
+     * Añadido para NB-IoT
+     */
+    void DoStartContentionBasedRandomAccessProcedure(uint64_t m_imsi,
+                                                      int repetitionOfPreamble_UE,
+                                                      int preambleTransmissionAttempt_UE,
+                                                      int periodicity_UE,
+                                                      int startTime_UE);
+    /**
      * Set RNTI
      *
      * \param rnti the RNTI
@@ -218,12 +227,20 @@ class LteUeMac : public Object
     // internal methods
     /// Randomly select and send RA preamble function
     void RandomlySelectAndSendRaPreamble();
+    // Añadido para NB-IoT
+    /// Randomly select and send RA preamble function NB-IoT
+    void RandomlySelectAndSendRaPreamble (int repetitionOfPreamble_UE,int preambleTransmissionAttempt_UE,int periodicity_UE,int startTime_UE);
+    // Fin NB-IoT
     /**
      * Send RA preamble function
      *
      * \param contention if true randomly select and send the RA preamble
      */
     void SendRaPreamble(bool contention);
+    // Añadido para NB-IoT
+    /// Send RA preamble function NB-IoT
+    void SendRaPreamble (int repetitionOfPreamble_UE,int preambleTransmissionAttempt_UE,int periodicity_UE,int startTime_UE);
+    // Fin NB-IoT
     /// Start waiting for RA response function
     void StartWaitingForRaResponse();
     /**
@@ -238,6 +255,11 @@ class LteUeMac : public Object
      * \param contention if true randomly select and send the RA preamble
      */
     void RaResponseTimeout(bool contention);
+    // Añadido para NB-IoT
+    /// RA response timeout function NB-IoT
+    void RaResponseTimeout_NB(int repetitionOfPreamble_UE,int preambleTransmissionAttempt_UE,int periodicity_UE,int startTime_UE);
+    // Fin NB-IoT
+
     /// Send report buffer status
     void SendReportBufferStatus();
     /// Refresh HARQ processes packet buffer function
@@ -292,6 +314,17 @@ class LteUeMac : public Object
     uint32_t m_subframeNo;       ///< subframe number
     uint8_t m_raRnti;            ///< RA RNTI
     bool m_waitingForRaResponse; ///< waiting for RA response
+
+    /**
+    * Variables utilizadas en la función DoStartContentionBasedRandomAccessProcedure()
+    * Añadido para NB-IoT
+    */
+    uint64_t UE_IMSI; ///<International Mobile Subscriber Identity del UE 
+    int m_preambleTransmissionRepetitionCounter; ///<Contador de repeticiones de transmisión de preámbulos en RA
+    int transmissionLastTime; ///<Tiempo de la última transmisión
+    int testCounter;  //<Variable que sirve de contador en el envío de preámbulos
+    int startSendTime; ///<Tiempo inicial del envío
+    int totalSpendTime; ///<Tiempo total de envío
 
     /**
      * \brief The `RaResponseTimeout` trace source. Fired RA response timeout.

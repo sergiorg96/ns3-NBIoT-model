@@ -57,6 +57,12 @@ class UeMemberLteUeCmacSapProvider : public LteUeCmacSapProvider
     // inherited from LteUeCmacSapProvider
     void ConfigureRach(RachConfig rc) override;
     void StartContentionBasedRandomAccessProcedure() override;
+    // Añadido para NB-IoT
+    void StartContentionBasedRandomAccessProcedure(uint64_t m_imsi,
+                                                    int repetitionOfPreamble_UE,
+                                                    int preambleTransmissionAttempt_UE,
+                                                    int periodicity_UE,
+                                                    int startTime_UE) override;
     void StartNonContentionBasedRandomAccessProcedure(uint16_t rnti,
                                                       uint8_t preambleId,
                                                       uint8_t prachMask) override;
@@ -88,6 +94,17 @@ void
 UeMemberLteUeCmacSapProvider::StartContentionBasedRandomAccessProcedure()
 {
     m_mac->DoStartContentionBasedRandomAccessProcedure();
+}
+
+// Añadido para NB-IoT
+void 
+UeMemberLteUeCmacSapProvider::StartContentionBasedRandomAccessProcedure(uint64_t m_imsi,
+                                                                        int repetitionOfPreamble_UE,
+                                                                        int preambleTransmissionAttempt_UE,
+                                                                        int periodicity_UE,
+                                                                        int startTime_UE)
+{
+  m_mac->DoStartContentionBasedRandomAccessProcedure(m_imsi, repetitionOfPreamble_UE, preambleTransmissionAttempt_UE, periodicity_UE, startTime_UE);
 }
 
 void
@@ -409,6 +426,53 @@ LteUeMac::RandomlySelectAndSendRaPreamble()
     SendRaPreamble(contention);
 }
 
+// Añadido para NB-IoT
+// for NB-IoT
+void 
+LteUeMac::RandomlySelectAndSendRaPreamble (int repetitionOfPreamble_UE,int preambleTransmissionAttempt_UE,int periodicity_UE,int startTime_UE)
+{
+  NS_LOG_FUNCTION(this);
+  // 3GPP 36.321 5.1.1  
+  NS_ASSERT_MSG(m_rachConfigured, "RACH not configured");
+  // Se asume que no hay preambulos del grupo B Random Access
+  m_raPreambleId = m_raPreambleUniformVariable->GetInteger(0, m_rachConfig.numberOfRaPreambles*2 - 1); 
+  
+  //++m_preambleTransmissionRepetitionCounter;
+  SendRaPreamble(repetitionOfPreamble_UE,preambleTransmissionAttempt_UE,periodicity_UE,startTime_UE);
+
+  // Se ha establecido un un número de repeticiones de envío de preambulo de 2, 8 y 32 correspondiendo a CE0, CE1 y C2.
+  if(repetitionOfPreamble_UE == 2){
+      //++m_preambleTransmissionRepetitionCounter;
+      void (LteUeMac::*sendTwice)(int repetitionOfPreamble_UE,int preambleTransmissionAttempt_UE,int periodicity_UE,int startTime_UE)
+      = &LteUeMac::SendRaPreamble;
+   
+      for(int i =1;i<repetitionOfPreamble_UE+1;i++){
+      m_raPreambleId = m_raPreambleUniformVariable->GetInteger (0, m_rachConfig.numberOfRaPreambles*2 - 1);
+      Simulator::Schedule (MilliSeconds (i*5.6), sendTwice, this,repetitionOfPreamble_UE,preambleTransmissionAttempt_UE,periodicity_UE,startTime_UE);
+      }
+   }
+  else if(repetitionOfPreamble_UE == 8){
+      //++m_preambleTransmissionRepetitionCounter;
+    
+       void (LteUeMac::*sendEighth)(int repetitionOfPreamble_UE,int preambleTransmissionAttempt_UE,int periodicity_UE,int startTime_UE)
+        = &LteUeMac::SendRaPreamble;
+       for(int i =1;i<repetitionOfPreamble_UE+1;i++){  
+        m_raPreambleId = m_raPreambleUniformVariable->GetInteger (0, m_rachConfig.numberOfRaPreambles*8 - 1);  
+        Simulator::Schedule (MilliSeconds (i*5.6), sendEighth, this,repetitionOfPreamble_UE,preambleTransmissionAttempt_UE,periodicity_UE,startTime_UE);  
+       }
+    }
+  else if(repetitionOfPreamble_UE == 32){   
+       void (LteUeMac::*send32)(int repetitionOfPreamble_UE,int preambleTransmissionAttempt_UE,int periodicity_UE,int startTime_UE)
+       = &LteUeMac::SendRaPreamble;
+       for(int i =1;i<repetitionOfPreamble_UE+1;i++){
+        //++m_preambleTransmissionRepetitionCounter;
+        m_raPreambleId = m_raPreambleUniformVariable->GetInteger (0, m_rachConfig.numberOfRaPreambles*32 - 1);
+        Simulator::Schedule (MilliSeconds (i*5.6), send32, this,repetitionOfPreamble_UE,preambleTransmissionAttempt_UE,periodicity_UE,startTime_UE);
+        
+       }
+  }
+}
+
 void
 LteUeMac::SendRaPreamble(bool contention)
 {
@@ -433,6 +497,86 @@ LteUeMac::SendRaPreamble(bool contention)
         Simulator::Schedule(raWindowEnd, &LteUeMac::RaResponseTimeout, this, contention);
 }
 
+// Añadido para NB-IoT
+// Envío del preambulo para RandomlySelectAndSendRaPreamble en contentionBasedRandomAccessProcedure
+void
+LteUeMac::SendRaPreamble(int repetitionOfPreamble_UE,int preambleTransmissionAttempt_UE,int periodicity_UE,int startTime_UE)
+{
+    NS_ASSERT(m_subframeNo > 0); // sanity check for subframe starting at 1
+  
+    m_raRnti = m_subframeNo - 1;
+
+    m_preambleTransmissionRepetitionCounter += 1;
+
+    m_uePhySapProvider->SendRachPreamble(m_raPreambleId, m_raRnti);
+    
+    ++testCounter;
+    if(testCounter==1){
+      //std::cout<<"IMSI "<<UE_IMSI <<">10"<<std::endl;
+      // std::cout<<"IMSI "<<UE_IMSI <<"send first preamble"<<std::endl;
+      startSendTime = (m_frameNo-1)*10+(m_subframeNo-1);
+    }
+    // Último
+    if(testCounter==223){
+       std::cout<<"IMSI "<<UE_IMSI <<">222"<<std::endl;
+    }
+
+    if(m_preambleTransmissionRepetitionCounter<repetitionOfPreamble_UE+1){
+        //std::cout<<"At time:"<<(m_frameNo-1)*10+(m_subframeNo-1)<<"ms"<<std::endl;
+        //std::cout<<"IMSI "<<UE_IMSI << " sent preamble id " << (uint32_t) m_raPreambleId << ", RA-RNTI " << (uint32_t) m_raRnti<<std::endl;
+    } 
+
+    // Se inicializa a 0 el tiempo de backoff para NB-IoT
+    int backoffTime = 0;
+
+    // El Windows Size de respuesta RAR depende del PP (PDCCH Period)
+    int ra_ResponseWindowSize=0;
+    // Se ha establecido un un número de repeticiones de envío de preambulo de 2, 8 y 32 correspondiendo a CE0, CE1 y C2.
+    // Se programan las Windows Size de RAR dependiendo del CE level
+    if(repetitionOfPreamble_UE==2){
+        //2 PDCCH Period(2PP)
+        ra_ResponseWindowSize = 2*m_rachConfig.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_0.npdcch_numRepetitions_RA_r13 *
+                            m_rachConfig.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_0.npdcch_StartSF_CSS_RA_r13;  
+        if(m_preambleTransmissionRepetitionCounter == repetitionOfPreamble_UE+1 ){ 
+            //std::cout<<"At time:"<<(m_frameNo-1)*10+(m_subframeNo-1)+4<<"ms"<<std::endl;
+            //std::cout<<"IMSI "<<UE_IMSI <<" start RAR window"<<std::endl;
+            //TS 36.321 5.1
+            Time raWindowBegin = MilliSeconds (3); 
+            Time raWindowEnd = MilliSeconds (3 + ra_ResponseWindowSize + 1 + backoffTime);
+            Simulator::Schedule (raWindowBegin, &LteUeMac::StartWaitingForRaResponse, this);
+            m_noRaResponseReceivedEvent = Simulator::Schedule (raWindowEnd, &LteUeMac::RaResponseTimeout_NB, this,repetitionOfPreamble_UE,preambleTransmissionAttempt_UE,periodicity_UE,startTime_UE);
+        }
+    }
+    else if(repetitionOfPreamble_UE == 8 && m_preambleTransmissionRepetitionCounter == repetitionOfPreamble_UE + 1){
+        //3 PDCCH Period(3PP)
+        ra_ResponseWindowSize = 3*m_rachConfig.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_1.npdcch_numRepetitions_RA_r13 *
+                            m_rachConfig.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_1.npdcch_StartSF_CSS_RA_r13;  
+        if(m_preambleTransmissionRepetitionCounter == repetitionOfPreamble_UE+1 ){
+            //std::cout<<"At time:"<<(m_frameNo-1)*10+(m_subframeNo-1)+4<<"ms"<<std::endl;
+            //std::cout<<"IMSI "<<UE_IMSI <<" start RAR window"<<std::endl;
+            //TS 36.321 5.1
+            Time raWindowBegin = MilliSeconds (3); 
+            Time raWindowEnd = MilliSeconds (3 + ra_ResponseWindowSize + 1 + backoffTime);
+            Simulator::Schedule (raWindowBegin, &LteUeMac::StartWaitingForRaResponse, this);
+            m_noRaResponseReceivedEvent = Simulator::Schedule (raWindowEnd, &LteUeMac::RaResponseTimeout_NB, this,repetitionOfPreamble_UE,preambleTransmissionAttempt_UE,periodicity_UE,startTime_UE);
+        }  
+    }
+    else if(repetitionOfPreamble_UE==32 && m_preambleTransmissionRepetitionCounter== repetitionOfPreamble_UE+1){
+        //4 PDCCH Period(4PP)
+        ra_ResponseWindowSize = 4*m_rachConfig.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_2.npdcch_numRepetitions_RA_r13 *
+                            m_rachConfig.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_2.npdcch_StartSF_CSS_RA_r13;
+        if(m_preambleTransmissionRepetitionCounter == repetitionOfPreamble_UE+1 ){
+            //std::cout<<"At time:"<<(m_frameNo-1)*10+(m_subframeNo-1)+4<<"ms"<<std::endl;
+            //std::cout<<"IMSI "<<UE_IMSI <<" start RAR window"<<std::endl;
+            //TS 36.321 5.1
+            Time raWindowBegin = MilliSeconds (3); 
+            Time raWindowEnd = MilliSeconds (3 + ra_ResponseWindowSize + 1 + backoffTime);
+            Simulator::Schedule (raWindowBegin, &LteUeMac::StartWaitingForRaResponse, this);
+            m_noRaResponseReceivedEvent = Simulator::Schedule (raWindowEnd, &LteUeMac::RaResponseTimeout_NB, this,repetitionOfPreamble_UE,preambleTransmissionAttempt_UE,periodicity_UE,startTime_UE);
+        }  
+    }
+}
+
 void
 LteUeMac::StartWaitingForRaResponse()
 {
@@ -446,6 +590,20 @@ LteUeMac::RecvRaResponse(BuildRarListElement_s raResponse)
     NS_LOG_FUNCTION(this);
     m_waitingForRaResponse = false;
     m_noRaResponseReceivedEvent.Cancel();
+
+    // Añadido para NB-IoT
+    Time nowTime1 = Simulator::Now();
+    int nowTime_ms1 = nowTime1.GetMilliSeconds();
+
+    // std::cout<<"IMSI "<<UE_IMSI<<" got RAR"<<std::endl;
+    //+ 1 is for the raWindowBegin , in LTE, the value is 3,in NB-IoT the value should be 4
+    totalSpendTime = nowTime_ms1 - startSendTime +1;
+
+    //std::cout<<"At time: "<<nowTime_ms1+2<<"ms"<<std::endl;
+    //std::cout<<"IMSI "<<UE_IMSI<<" got RAR for RAPID " << (uint32_t) m_raPreambleId << ", setting T-C-RNTI = " << raResponse.m_rnti<<std::endl;
+    //std::cout<<totalSpendTime<<std::endl;
+    // Fin NB-IoT
+
     NS_LOG_INFO("got RAR for RAPID " << (uint32_t)m_raPreambleId
                                      << ", setting T-C-RNTI = " << raResponse.m_rnti);
     m_rnti = raResponse.m_rnti;
@@ -513,6 +671,174 @@ LteUeMac::RaResponseTimeout(bool contention)
     }
 }
 
+// Añadido para NB-IoT
+//for NB-IoT
+void 
+LteUeMac::RaResponseTimeout_NB(int repetitionOfPreamble_UE,int preambleTransmissionAttempt_UE,int periodicity_UE,int startTime_UE)
+{
+  NS_LOG_FUNCTION (this << contention);
+
+  m_waitingForRaResponse = false;
+  // 3GPP 36.321 5.1.4
+
+  if(repetitionOfPreamble_UE==2){
+    if(m_preambleTransmissionRepetitionCounter == repetitionOfPreamble_UE+1){
+      m_preambleTransmissionRepetitionCounter = 0;
+    }
+  }
+  else if(repetitionOfPreamble_UE==8||repetitionOfPreamble_UE==32){
+    m_preambleTransmissionRepetitionCounter = 0;
+  }
+
+  if((int)m_preambleTransmissionCounter == (preambleTransmissionAttempt_UE-1))
+    {
+      NS_LOG_INFO ("RAR timeout, preambleTransMax reached => giving up");
+      //std::cout<<"IMSI "<<UE_IMSI<<" reached preambleTransMaxNum. Level up CE level."<<std::endl;
+      
+      m_preambleTransmissionCounter = 0;
+      // Comprobación para aumentar el CE level
+      if(repetitionOfPreamble_UE == 2){
+        //std::cout<<"IMSI "<<UE_IMSI<<" levels up to CE level 1"<<std::endl;
+
+        // Tiempo de ejecución actual
+        Time nowTime = Simulator::Now();
+        int nowTime_ms = nowTime.GetMilliSeconds();
+        int multiple = (nowTime_ms/160)+1; //160 periodicidad en C1
+
+        int correctTransTime = 0 ;
+        if((160*(multiple-1)+32) > nowTime_ms){
+          correctTransTime = 160*(multiple-1)+32;//32 startTime en C1
+        }
+        else{
+          correctTransTime = 160*multiple + 32;//32 startTime en C1
+        }
+        Time difference = MilliSeconds(correctTransTime - nowTime_ms + 1);
+  
+        void (LteUeMac::*startTransPreamble_1)(int repetitionOfPreamble_UE,int preambleTransmissionAttempt_UE,int periodicity_UE,int startTime_UE)
+        = &LteUeMac::RandomlySelectAndSendRaPreamble;
+
+        Simulator::Schedule(difference,startTransPreamble_1,this,8,3,160,32); // Valores en C1
+
+        //RandomlySelectAndSendRaPreamble (8,3,periodicity_UE,startTime_UE);
+      }
+      else if(repetitionOfPreamble_UE == 8){
+        //std::cout<<"IMSI "<<UE_IMSI<<" levels up to CE level 2"<<std::endl;
+
+        // Tiempo de ejecución actual
+        Time nowTime = Simulator::Now();
+        int nowTime_ms = nowTime.GetMilliSeconds();
+        int multiple = (nowTime_ms/640)+1; //640 periodicidad en C2
+        int correctTransTime = 0 ;
+        if((640*(multiple-1)+256) > nowTime_ms){
+          correctTransTime = 640*(multiple-1)+256;//256 startTime en C2
+        }
+        else{
+          correctTransTime = 640*multiple + 256;//256 startTime en C2
+        }
+        Time difference = MilliSeconds(correctTransTime - nowTime_ms + 1);
+  
+        void (LteUeMac::*startTransPreamble_2)(int repetitionOfPreamble_UE,int preambleTransmissionAttempt_UE,int periodicity_UE,int startTime_UE)
+        = &LteUeMac::RandomlySelectAndSendRaPreamble;
+
+        Simulator::Schedule(difference,startTransPreamble_2,this,32,3,640,256); // Valores en C2
+
+        //RandomlySelectAndSendRaPreamble (32,3,periodicity_UE,startTime_UE);
+      }
+      else if(repetitionOfPreamble_UE == 32){
+        //std::cout<<"IMSI "<<UE_IMSI<<" keeps in CE level 2"<<std::endl;
+        //m_cmacSapUser->NotifyRandomAccessFailed ();
+        // Tiempo de ejecución actual
+        Time nowTime = Simulator::Now();
+        int nowTime_ms = nowTime.GetMilliSeconds();
+        int multiple = (nowTime_ms/640)+1; //640 periodicidad en C2
+        int correctTransTime = 0 ;
+        if((640*(multiple-1)+256) > nowTime_ms){
+          correctTransTime = 640*(multiple-1)+256;//256 startTime en C2
+        }
+        else{
+          correctTransTime = 640*multiple + 256;//256 startTime en C2
+        }
+        Time difference = MilliSeconds(correctTransTime - nowTime_ms + 1);
+  
+        void (LteUeMac::*startTransPreamble_2)(int repetitionOfPreamble_UE,int preambleTransmissionAttempt_UE,int periodicity_UE,int startTime_UE)
+        = &LteUeMac::RandomlySelectAndSendRaPreamble;
+
+        Simulator::Schedule(difference,startTransPreamble_2,this,32,3,640,256); // Valores en C2
+      }
+      
+    }
+  else
+    {
+      NS_LOG_INFO ("RAR timeout, re-send preamble");
+      
+      // if m_preambleTransmissionRepetitionCounter == 0,mean 
+      // m_preambleTransmissionRepetitionCounter == repetitionOfPreamble_UE
+      // the senting preamble is the last one during the repetition
+      if(m_preambleTransmissionRepetitionCounter == 0){
+          ++m_preambleTransmissionCounter;
+
+          if(repetitionOfPreamble_UE==2){
+            // Tiempo de ejecución actual
+            Time nowTime = Simulator::Now();
+            int nowTime_ms = nowTime.GetMilliSeconds();
+            int multiple = (nowTime_ms/40)+1; //40 periodicidad en C0
+            int correctTransTime = 0 ;
+            if((40*(multiple-1)+8) > nowTime_ms){
+              correctTransTime = 40*(multiple-1)+8;//8 startTime en C0
+            }
+            else{
+              correctTransTime = 40*multiple + 8;//8 startTime en C0
+            }
+            Time difference = MilliSeconds(correctTransTime - nowTime_ms + 1);
+      
+            void (LteUeMac::*startTransPreamble_2)(int repetitionOfPreamble_UE,int preambleTransmissionAttempt_UE,int periodicity_UE,int startTime_UE)
+            = &LteUeMac::RandomlySelectAndSendRaPreamble;
+            Simulator::Schedule(difference,startTransPreamble_2,this,2,3,40,8); // Valores en C0
+          }
+          else if(repetitionOfPreamble_UE==8){
+            //get current execution time
+            Time nowTime = Simulator::Now();
+            int nowTime_ms = nowTime.GetMilliSeconds();
+            int multiple = (nowTime_ms/160)+1; //160 periodicidad en C1
+            int correctTransTime = 0 ;
+            if((160*(multiple-1)+32) > nowTime_ms){
+              correctTransTime = 160*(multiple-1)+32;//32 startTime en C1
+            }
+            else{
+              correctTransTime = 160*multiple + 32;//32 startTime en C1
+            }
+            Time difference = MilliSeconds(correctTransTime - nowTime_ms + 1);
+      
+            void (LteUeMac::*startTransPreamble_2)(int repetitionOfPreamble_UE,int preambleTransmissionAttempt_UE,int periodicity_UE,int startTime_UE)
+            = &LteUeMac::RandomlySelectAndSendRaPreamble;
+            Simulator::Schedule(difference,startTransPreamble_2,this,8,3,160,32); // Valores en C1
+            }
+
+          else if(repetitionOfPreamble_UE==32){
+            //get current execution time
+            Time nowTime = Simulator::Now();
+            int nowTime_ms = nowTime.GetMilliSeconds();
+            int multiple = (nowTime_ms/640)+1; //640 periodicidad en C2
+            int correctTransTime = 0 ;
+            if((640*(multiple-1)+256) > nowTime_ms){
+              correctTransTime = 640*(multiple-1)+256;//256 startTime en C2
+            }
+            else{
+              correctTransTime = 640*multiple + 256;//256 startTime en C2
+            }
+            Time difference = MilliSeconds(correctTransTime - nowTime_ms + 1);
+      
+            void (LteUeMac::*startTransPreamble_2)(int repetitionOfPreamble_UE,int preambleTransmissionAttempt_UE,int periodicity_UE,int startTime_UE)
+            = &LteUeMac::RandomlySelectAndSendRaPreamble;
+            Simulator::Schedule(difference,startTransPreamble_2,this,32,3,640,256); // Valores en C2
+          }
+      
+      }
+      
+    }
+}
+// Fin NB-IoT
+
 void
 LteUeMac::DoConfigureRach(LteUeCmacSapProvider::RachConfig rc)
 {
@@ -531,6 +857,50 @@ LteUeMac::DoStartContentionBasedRandomAccessProcedure()
     m_preambleTransmissionCounter = 0;
     m_backoffParameter = 0;
     RandomlySelectAndSendRaPreamble();
+}
+
+// Aañadido para NB-IoT
+void 
+LteUeMac::DoStartContentionBasedRandomAccessProcedure (uint64_t m_imsi, int repetitionOfPreamble_UE, int preambleTransmissionAttempt_UE,int periodicity_UE,int startTime_UE)
+{
+  NS_LOG_FUNCTION (this);
+
+  // 3GPP 36.321 5.1.1
+  NS_ASSERT_MSG (m_rachConfigured, "RACH not configured");
+  m_preambleTransmissionCounter = 0;
+  m_backoffParameter = 0;
+
+  // Añadido para NB-IoT
+  UE_IMSI = m_imsi;
+  m_preambleTransmissionRepetitionCounter = 0;
+  transmissionLastTime = 0;
+
+  testCounter = 0;
+  startSendTime = 0;
+  totalSpendTime = 0;
+
+  // Se obtiene el tiempo actual de simulación
+  Time nowTime = Simulator::Now();
+  int nowTime_ms = nowTime.GetMilliSeconds();
+  int multiple = (nowTime_ms/periodicity_UE)+1;
+  int correctTransTime = 0 ;
+
+  if((periodicity_UE*(multiple-1)+startTime_UE) > nowTime_ms){
+    correctTransTime = periodicity_UE*(multiple-1)+startTime_UE;
+  }
+  else{
+    correctTransTime = periodicity_UE*multiple + startTime_UE;
+  }
+  Time difference = MilliSeconds(correctTransTime - nowTime_ms + 1);
+
+  //std::cout<<"nowTime_ms = "<<nowTime_ms<<std::endl;
+  
+  void (LteUeMac::*startTransPreamble)(int repetitionOfPreamble_UE,int preambleTransmissionAttempt_UE,int periodicity_UE,int startTime_UE)
+  = &LteUeMac::RandomlySelectAndSendRaPreamble;
+
+  Simulator::Schedule(difference,startTransPreamble,this,repetitionOfPreamble_UE,preambleTransmissionAttempt_UE,periodicity_UE,startTime_UE);
+  
+  //RandomlySelectAndSendRaPreamble(repetitionOfPreamble_UE,preambleTransmissionAttempt_UE,periodicity_UE,startTime_UE);
 }
 
 void

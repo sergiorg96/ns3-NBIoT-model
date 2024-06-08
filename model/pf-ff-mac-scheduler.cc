@@ -568,6 +568,12 @@ PfFfMacScheduler::DoSchedDlTriggerReq(
             // no more allocation space: finish allocation
             break;
         }
+
+        // Añadido para NB-IoT
+        //In NB-IoT, each UE only allocated 1 RB
+        // Forzamos RB (Resource Block) a 1, ya que, en NB-IoT cada UE sólo se asigna 1 RB
+        rbLen = 1;
+
         newRar.m_grant.m_rbStart = rbStart;
         newRar.m_grant.m_rbLen = rbLen;
         newRar.m_grant.m_tbSize = tbSizeBits / 8;

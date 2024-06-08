@@ -2008,6 +2008,7 @@ LteEnbRrc::GetTypeId()
                           MakeTimeChecker())
 
             // Cell selection related attribute
+            // Añadido para NB-IoT
             .AddAttribute("QRxLevMin",
                           "One of information transmitted within the SIB1 message, "
                           "indicating the required minimum RSRP level that any UE must "
@@ -2017,9 +2018,9 @@ LteEnbRrc::GetTypeId()
                           "3GPP TS 36.133. This restriction, however, only applies to "
                           "initial cell selection and EPC-enabled simulation.",
                           TypeId::ATTR_GET | TypeId::ATTR_CONSTRUCT,
-                          IntegerValue(-70),
+                          IntegerValue(-78),
                           MakeIntegerAccessor(&LteEnbRrc::m_qRxLevMin),
-                          MakeIntegerChecker<int8_t>(-70, -22))
+                          MakeIntegerChecker<int8_t>(-78, -22)) // Límite en NB-IoT de -156 dBm
             .AddAttribute("NumberOfComponentCarriers",
                           "Number of Component Carriers",
                           UintegerValue(1),
@@ -3514,6 +3515,36 @@ LteEnbRrc::SendSystemInformation()
         rachConfigCommon.raSupervisionInfo.preambleTransMax = rc.preambleTransMax;
         rachConfigCommon.raSupervisionInfo.raResponseWindowSize = rc.raResponseWindowSize;
         rachConfigCommon.txFailParam.connEstFailCount = rc.connEstFailCount;
+
+        // Añadido para NB-IoT
+        rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_0_Info.numRepetitionsPerPreambleAttempt_r13 = rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_0.numRepetitionsPerPreambleAttempt_r13;
+        rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_1_Info.numRepetitionsPerPreambleAttempt_r13 = rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_1.numRepetitionsPerPreambleAttempt_r13;
+        rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_2_Info.numRepetitionsPerPreambleAttempt_r13 = rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_2.numRepetitionsPerPreambleAttempt_r13;
+        
+        rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_0_Info.maxNumPreambleAttempt_r13 = rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_0.maxNumPreambleAttempt_r13;
+        rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_1_Info.maxNumPreambleAttempt_r13 = rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_1.maxNumPreambleAttempt_r13;
+        rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_2_Info.maxNumPreambleAttempt_r13 = rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_2.maxNumPreambleAttempt_r13;
+        
+        rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_0_Info.periodicity_r13 = rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_0.periodicity_r13;
+        rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_1_Info.periodicity_r13 = rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_1.periodicity_r13;
+        rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_2_Info.periodicity_r13 = rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_2.periodicity_r13;
+
+        rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_0_Info.startTime_r13 = rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_0.startTime_r13;
+        rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_1_Info.startTime_r13 = rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_1.startTime_r13;
+        rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_2_Info.startTime_r13 = rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_2.startTime_r13;
+        
+        rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_0_Info.npdcch_numRepetitions_RA_r13 = rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_0.npdcch_numRepetitions_RA_r13;
+        rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_1_Info.npdcch_numRepetitions_RA_r13 = rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_1.npdcch_numRepetitions_RA_r13;
+        rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_2_Info.npdcch_numRepetitions_RA_r13 = rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_2.npdcch_numRepetitions_RA_r13;
+        
+        rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_0_Info.npdcch_StartSF_CSS_RA_r13 = rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_0.npdcch_StartSF_CSS_RA_r13;
+        rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_1_Info.npdcch_StartSF_CSS_RA_r13 = rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_1.npdcch_StartSF_CSS_RA_r13;
+        rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_2_Info.npdcch_StartSF_CSS_RA_r13 = rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_2.npdcch_StartSF_CSS_RA_r13;        
+
+        rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.rsrp_ThresholdsPrachInfoList_r13.NRSRP_thresholds_first = rc.nprachConfig.nprach_ConfigSIB.rsrp_ThresholdsPrachInfoList.NRSRP_thresholds_first_value;
+        rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.rsrp_ThresholdsPrachInfoList_r13.NRSRP_thresholds_second = rc.nprachConfig.nprach_ConfigSIB.rsrp_ThresholdsPrachInfoList.NRSRP_thresholds_second_value; 
+        // Fin NB-IoT
+
         si.sib2.radioResourceConfigCommon.rachConfigCommon = rachConfigCommon;
 
         m_rrcSapUser->SendSystemInformation(it.second->GetCellId(), si);

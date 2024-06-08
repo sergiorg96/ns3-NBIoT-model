@@ -38,6 +38,56 @@ class LteUeCmacSapProvider
   public:
     virtual ~LteUeCmacSapProvider();
 
+    // Añadido para NB-IoT
+    /// Estructura para CE0
+    struct EnhancementCoverageLevel_0{
+      int numRepetitionsPerPreambleAttempt_r13;
+      int maxNumPreambleAttempt_r13;
+      int periodicity_r13;
+      int startTime_r13;
+      int npdcch_numRepetitions_RA_r13;
+      int npdcch_StartSF_CSS_RA_r13;
+    };
+    /// Estructura para CE1
+    struct EnhancementCoverageLevel_1{
+      int numRepetitionsPerPreambleAttempt_r13;
+      int maxNumPreambleAttempt_r13;
+      int periodicity_r13;
+      int startTime_r13;
+      int npdcch_numRepetitions_RA_r13;
+      int npdcch_StartSF_CSS_RA_r13;
+    };
+    /// Estructura para CE2
+    struct EnhancementCoverageLevel_2{
+      int numRepetitionsPerPreambleAttempt_r13;
+      int maxNumPreambleAttempt_r13;
+      int periodicity_r13;
+      int startTime_r13;
+      int npdcch_numRepetitions_RA_r13;
+      int npdcch_StartSF_CSS_RA_r13;
+    };
+    /// Estructura NPRACH_ParametersList
+    struct NPRACH_ParametersList{
+      EnhancementCoverageLevel_0 CE_0;
+      EnhancementCoverageLevel_1 CE_1;
+      EnhancementCoverageLevel_2 CE_2;
+    };
+    /// Estructura RSRP_ThresholdsNPRACH_InfoList
+    struct RSRP_ThresholdsNPRACH_InfoList{
+      int NRSRP_thresholds_first_value;
+      int NRSRP_thresholds_second_value;
+    };
+    /// Estructura NPRACH_ConfigSIB
+    struct NPRACH_ConfigSIB{
+      RSRP_ThresholdsNPRACH_InfoList rsrp_ThresholdsPrachInfoList;
+      NPRACH_ParametersList nprach_ParametersList;
+    };
+    /// Estructura NprachConfig
+    struct NprachConfig{
+      NPRACH_ConfigSIB nprach_ConfigSIB;
+    };
+    // Fin definición estructuras NB-IoT
+
     /// RachConfig structure
     struct RachConfig
     {
@@ -45,6 +95,8 @@ class LteUeCmacSapProvider
         uint8_t preambleTransMax;     ///< preamble transmit maximum
         uint8_t raResponseWindowSize; ///< RA response window size
         uint8_t connEstFailCount;     ///< the counter value for T300 timer expiration
+        // Añadido para NB-IoT
+        NprachConfig nprachConfig;    ///< Estructura para almacenar los datos del SIB2 modificado de NB-IoT
     };
 
     /**
@@ -60,6 +112,17 @@ class LteUeCmacSapProvider
      *
      */
     virtual void StartContentionBasedRandomAccessProcedure() = 0;
+
+    /**
+     * Función que sobrescribe el funcionamiento del procedimiento de acceso aleatorio
+     * para el caso de NB-IoT cuando se le pasan los parámetros especificados
+     * Añadido para NB-IoT
+     */
+    virtual void StartContentionBasedRandomAccessProcedure(uint64_t m_imsi,
+                                                            int repetitionOfPreamble_UE,
+                                                            int preambleTransmissionAttempt_UE,
+                                                            int periodicity_UE,
+                                                            int startTime_UE) = 0;
 
     /**
      * tell the MAC to start a non-contention-based random access

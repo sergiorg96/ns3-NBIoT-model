@@ -777,6 +777,65 @@ class LteUeRrc : public Object
     LteUeCcmRrcSapProvider* m_ccmRrcSapProvider; ///< CCM RRC SAP provider
     LteUeCcmRrcSapUser* m_ccmRrcSapUser;         ///< CCM RRC SAP user
 
+    // Añadido para NB-IoT
+    /// RSRP measured by UE --> Debería ser igual que m_storedMeasValues->second.rsrp
+    double RSRP_dbm; 
+
+    // Umbrales de NRSRP
+    int NRSRP_thresholds_first;
+    int NRSRP_thresholds_second;
+
+    // Parámetros de la nueva función StartContentionBasedRandomAccessProcedure con valores para NB-IoT
+    int repetitionOfPreamble_UE;          ///< Repetción del preambulo para el UE
+    int preambleTransmissionAttempt_UE;   ///< Número máximo de intentos de transmisión del preambulo
+    int periodicity_UE;                   ///< Periodicidad
+    int startTime_UE;                     ///< Tiempo de inicio de transmisión del UE
+
+    // Configuración RACH para almacenar los valores recibidos del SIB2
+    LteUeCmacSapProvider::RachConfig NB_rc;
+
+    typedef struct NPRACH_CE_0{
+      int maxNumPreambleAttempt_r13;
+      int numRepetitionsPerPreambleAttempt_r13;
+      int periodicity_r13;
+      int startTime_r13;
+      //int npdcch_numRepetitions_RA_r13;
+      //int npdcch_StartSF_CSS_RA_r13;
+    }CE_0;
+
+    typedef struct NPRACH_CE_1{
+     int maxNumPreambleAttempt_r13;
+     int numRepetitionsPerPreambleAttempt_r13;
+     int periodicity_r13;
+     int startTime_r13;
+     //int npdcch_numRepetitions_RA_r13;
+     //int npdcch_StartSF_CSS_RA_r13;
+    }CE_1;
+  
+    typedef struct NPRACH_CE_2{
+     int maxNumPreambleAttempt_r13;
+     int numRepetitionsPerPreambleAttempt_r13;
+     int periodicity_r13;
+     int startTime_r13;
+     //int npdcch_numRepetitions_RA_r13;
+     //int npdcch_StartSF_CSS_RA_r13;
+    }CE_2;
+  
+    CE_0 CE_0_object;
+    CE_1 CE_1_object;
+    CE_2 CE_2_object;
+
+    // Función que almacena los parámetros del SIB2 en variables de LteUeRrc
+    void SIB2_parameters ();
+
+    // Función que mapea la cantidad RSRP recibida con el valor de NRSRP en NB-IoT
+    int getNRSRP_Reported_value(double rsrp);
+
+    // Función para configurar el CE level del UE a través del NRSRP y de los umbrales NRSRP del SIB2
+    void judgeEnhancementCoverageLevel(int NRSRP_Reported_value);
+
+    // Fin NB-IoT
+
     /// The current UE RRC state.
     State m_state;
 

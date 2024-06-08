@@ -209,13 +209,14 @@ LteUeRrc::GetTypeId()
                           UintegerValue(0), // unused, read-only attribute
                           MakeUintegerAccessor(&LteUeRrc::GetRnti),
                           MakeUintegerChecker<uint16_t>())
+            // Añadido para NB-IoT. En LTE T300 el valor por defecto era 100
             .AddAttribute(
                 "T300",
                 "Timer for the RRC Connection Establishment procedure "
                 "(i.e., the procedure is deemed as failed if it takes longer than this). "
                 "Standard values: 100ms, 200ms, 300ms, 400ms, 600ms, 1000ms, 1500ms, 2000ms",
                 TimeValue(MilliSeconds(
-                    100)), // see 3GPP 36.331 UE-TimersAndConstants & RLF-TimersAndConstants
+                    10000)), // see 3GPP 36.331 UE-TimersAndConstants & RLF-TimersAndConstants
                 MakeTimeAccessor(&LteUeRrc::m_t300),
                 MakeTimeChecker(MilliSeconds(100), MilliSeconds(2000)))
             .AddAttribute(
@@ -531,6 +532,9 @@ void
 LteUeRrc::DoInitialize()
 {
     NS_LOG_FUNCTION(this);
+
+    // Añadido para NB-IoT
+    RSRP_dbm = 0;
 
     // setup the UE side of SRB0
     uint8_t lcid = 0;
@@ -972,6 +976,7 @@ LteUeRrc::DoRecvSystemInformation(LteRrcSap::SystemInformation msg)
 
     if (msg.haveSib2)
     {
+        std::cout <<"[myprint] rnti: " << m_rnti << " state is " << ToString(m_state) << std::endl;
         switch (m_state)
         {
         case IDLE_CAMPED_NORMALLY:
@@ -999,6 +1004,39 @@ LteUeRrc::DoRecvSystemInformation(LteRrcSap::SystemInformation msg)
             NS_ASSERT_MSG(m_connEstFailCountLimit > 0 && m_connEstFailCountLimit < 5,
                           "SIB2 msg contains wrong value " << m_connEstFailCountLimit
                                                            << "of connEstFailCount");
+
+            // Añadido para NB-IoT
+            rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_0.numRepetitionsPerPreambleAttempt_r13 = msg.sib2.radioResourceConfigCommon.rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_0_Info.numRepetitionsPerPreambleAttempt_r13;
+            rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_1.numRepetitionsPerPreambleAttempt_r13 = msg.sib2.radioResourceConfigCommon.rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_1_Info.numRepetitionsPerPreambleAttempt_r13;
+            rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_2.numRepetitionsPerPreambleAttempt_r13 = msg.sib2.radioResourceConfigCommon.rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_2_Info.numRepetitionsPerPreambleAttempt_r13;
+
+            rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_0.maxNumPreambleAttempt_r13 = msg.sib2.radioResourceConfigCommon.rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_0_Info.maxNumPreambleAttempt_r13;
+            rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_1.maxNumPreambleAttempt_r13 = msg.sib2.radioResourceConfigCommon.rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_1_Info.maxNumPreambleAttempt_r13;
+            rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_2.maxNumPreambleAttempt_r13 = msg.sib2.radioResourceConfigCommon.rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_2_Info.maxNumPreambleAttempt_r13;
+
+            rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_0.periodicity_r13 = msg.sib2.radioResourceConfigCommon.rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_0_Info.periodicity_r13;
+            rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_1.periodicity_r13 = msg.sib2.radioResourceConfigCommon.rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_1_Info.periodicity_r13;
+            rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_2.periodicity_r13 = msg.sib2.radioResourceConfigCommon.rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_2_Info.periodicity_r13;
+
+            rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_0.startTime_r13 = msg.sib2.radioResourceConfigCommon.rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_0_Info.startTime_r13;
+            rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_1.startTime_r13 = msg.sib2.radioResourceConfigCommon.rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_1_Info.startTime_r13;
+            rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_2.startTime_r13 = msg.sib2.radioResourceConfigCommon.rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_2_Info.startTime_r13;
+
+            rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_0.npdcch_numRepetitions_RA_r13 = msg.sib2.radioResourceConfigCommon.rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_0_Info.npdcch_numRepetitions_RA_r13;
+            rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_1.npdcch_numRepetitions_RA_r13 = msg.sib2.radioResourceConfigCommon.rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_1_Info.npdcch_numRepetitions_RA_r13;
+            rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_2.npdcch_numRepetitions_RA_r13 = msg.sib2.radioResourceConfigCommon.rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_2_Info.npdcch_numRepetitions_RA_r13;
+
+            rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_0.npdcch_StartSF_CSS_RA_r13 = msg.sib2.radioResourceConfigCommon.rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_0_Info.npdcch_StartSF_CSS_RA_r13;
+            rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_1.npdcch_StartSF_CSS_RA_r13 = msg.sib2.radioResourceConfigCommon.rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_1_Info.npdcch_StartSF_CSS_RA_r13;
+            rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_2.npdcch_StartSF_CSS_RA_r13 = msg.sib2.radioResourceConfigCommon.rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.NPRACH_ParametersList_r13.CE_2_Info.npdcch_StartSF_CSS_RA_r13;
+
+            rc.nprachConfig.nprach_ConfigSIB.rsrp_ThresholdsPrachInfoList.NRSRP_thresholds_first_value = msg.sib2.radioResourceConfigCommon.rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.rsrp_ThresholdsPrachInfoList_r13.NRSRP_thresholds_first;
+            rc.nprachConfig.nprach_ConfigSIB.rsrp_ThresholdsPrachInfoList.NRSRP_thresholds_second_value = msg.sib2.radioResourceConfigCommon.rachConfigCommon.nprachConfig.nprach_ConfigSIB_NB_r13.rsrp_ThresholdsPrachInfoList_r13.NRSRP_thresholds_second;
+ 
+            NB_rc = rc; //Se almacenan los valores para el cálculo del CE level
+
+            // Fin NB-IoT
+
             m_cmacSapProvider.at(0)->ConfigureRach(rc);
             m_cphySapProvider.at(0)->ConfigureUplink(m_ulEarfcn, m_ulBandwidth);
             m_cphySapProvider.at(0)->ConfigureReferenceSignalPower(
@@ -1856,6 +1894,9 @@ LteUeRrc::SaveUeMeasurements(uint16_t cellId,
                              uint8_t componentCarrierId)
 {
     NS_LOG_FUNCTION(this << cellId << +componentCarrierId << rsrp << rsrq << useLayer3Filtering);
+
+    // Añadido para NB-IoT
+    RSRP_dbm = rsrp;
 
     auto storedMeasIt = m_storedMeasValues.find(cellId);
 
@@ -3121,9 +3162,118 @@ LteUeRrc::StartConnection()
     NS_LOG_FUNCTION(this << m_imsi);
     NS_ASSERT(m_hasReceivedMib);
     NS_ASSERT(m_hasReceivedSib2);
+
+    //Añadido para NB-IoT
+
+    // Función que almacena los parámetros del SIB2 en variables de LteUeRrc
+    SIB2_parameters ();
+
+    // Obtener el valor de NRSRP
+    //std::cout<<"IMSI "<<m_imsi<<" measured RSRP dbm:"<<RSRP_dbm<<"dbm"<<std::endl;
+    NS_LOG_INFO("IMSI "<<m_imsi<<" measured RSRP dbm:"<<RSRP_dbm<<"dbm");
+    double NRSRP_Reported_value = getNRSRP_Reported_value(RSRP_dbm);
+    //std::cout<<"IMSI "<<m_imsi<<" NRSRP reported value:"<<NRSRP_Reported_value<<std::endl;
+    NS_LOG_INFO("IMSI "<<m_imsi<<" NRSRP reported value:"<<NRSRP_Reported_value);
+
+    // Obtener el CE level correspondiente con el NRSRP obtenido
+    judgeEnhancementCoverageLevel(NRSRP_Reported_value);
+    //std::cout<<"IMSI "<<m_imsi<<" CE level is: "<<UE_Judged_CE_level<<std::endl;
+    NS_LOG_INFO("IMSI "<<m_imsi<<" CE level is: "<<UE_Judged_CE_level);
+
+    // Elige la configuración RACH en función del CE level
+    if(UE_Judged_CE_level == 0){
+        repetitionOfPreamble_UE = CE_0_object.numRepetitionsPerPreambleAttempt_r13;
+        preambleTransmissionAttempt_UE = CE_0_object.maxNumPreambleAttempt_r13;
+        periodicity_UE = CE_0_object.periodicity_r13;
+        startTime_UE = CE_0_object.startTime_r13;    
+    }
+    else if(UE_Judged_CE_level == 1){
+        repetitionOfPreamble_UE = CE_1_object.numRepetitionsPerPreambleAttempt_r13;
+        preambleTransmissionAttempt_UE = CE_1_object.maxNumPreambleAttempt_r13;
+        periodicity_UE = CE_1_object.periodicity_r13;
+        startTime_UE = CE_1_object.startTime_r13;   
+    }
+    else{
+        repetitionOfPreamble_UE = CE_2_object.numRepetitionsPerPreambleAttempt_r13;
+        preambleTransmissionAttempt_UE = CE_2_object.maxNumPreambleAttempt_r13;
+        periodicity_UE = CE_2_object.periodicity_r13;
+        startTime_UE = CE_2_object.startTime_r13;   
+    }
+
+    // Fin NB-IoT
+
     m_connectionPending = false; // reset the flag
     SwitchToState(IDLE_RANDOM_ACCESS);
-    m_cmacSapProvider.at(0)->StartContentionBasedRandomAccessProcedure();
+    // Añadido para NB-IoT
+    //m_cmacSapProvider.at(0)->StartContentionBasedRandomAccessProcedure();
+    m_cmacSapProvider->StartContentionBasedRandomAccessProcedure(m_imsi,repetitionOfPreamble_UE,preambleTransmissionAttempt_UE,periodicity_UE,startTime_UE);
+
+}
+// Añadido para NB-IoT
+// Función que almacena los parámetros del SIB2 en variables de LteUeRrc
+void 
+LteUeRrc::SIB2_parameters ()
+{
+    NS_LOG_FUNCTION (this);
+    // Umbrales de NRSRP
+    NRSRP_thresholds_first = NB_rc.nprachConfig.nprach_ConfigSIB.rsrp_ThresholdsPrachInfoList.NRSRP_thresholds_first_value;
+    NRSRP_thresholds_second = NB_rc.nprachConfig.nprach_ConfigSIB.rsrp_ThresholdsPrachInfoList.NRSRP_thresholds_second_value;
+
+    // Configuración CE0
+    CE_0_object.maxNumPreambleAttempt_r13 = NB_rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_0.maxNumPreambleAttempt_r13;
+    CE_0_object.numRepetitionsPerPreambleAttempt_r13 = NB_rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_0.numRepetitionsPerPreambleAttempt_r13;
+    CE_0_object.periodicity_r13 = NB_rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_0.periodicity_r13;
+    CE_0_object.startTime_r13 = NB_rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_0.startTime_r13;
+
+    // Configuración CE1
+    CE_1_object.maxNumPreambleAttempt_r13 = NB_rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_1.maxNumPreambleAttempt_r13;
+    CE_1_object.numRepetitionsPerPreambleAttempt_r13 = NB_rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_1.numRepetitionsPerPreambleAttempt_r13;
+    CE_1_object.periodicity_r13 = NB_rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_1.periodicity_r13;
+    CE_1_object.startTime_r13 = NB_rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_1.startTime_r13;
+
+    // Configuración CE2
+    CE_2_object.maxNumPreambleAttempt_r13 = NB_rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_2.maxNumPreambleAttempt_r13;
+    CE_2_object.numRepetitionsPerPreambleAttempt_r13 = NB_rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_2.numRepetitionsPerPreambleAttempt_r13;
+    CE_2_object.periodicity_r13 = NB_rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_2.periodicity_r13;
+    CE_2_object.startTime_r13 = NB_rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_2.startTime_r13;
+    
+
+}
+// Añadido para NB-IoT
+// Función que mapea la cantidad RSRP recibida con el valor de NRSRP en NB-IoT
+int 
+LteUeRrc::getNRSRP_Reported_value(double rsrp)
+{     
+    int NRSRP_Reported_value = 0;
+    if (rsrp < -156){
+        NRSRP_Reported_value = 0; // Corresponde con NRSRP_00 según TS 36.133
+    }
+    else if (rsrp >= -44){
+        NRSRP_Reported_value = 113; // Corresponde con NRSRP_113 según TS 36.133
+    }  
+    else{
+        // Correspondencia entre tablas de RSRP y NRSRP según TS 36.133 
+        // Por ejemplo, si RSRP=-45, se encuentra entre -45 y -44 -> Correspondencia RSRP_96 y NRSRP_112
+        // Entonces RSRP=-45 que corresponde NRSRP_112 hay que sumar 157 al valor de RSRP NRSRP_(-45+157=112)
+        NRSRP_Reported_value = (int)(rsrp+157); 
+    }  
+    return NRSRP_Reported_value;
+}
+// Añadido para NB-IoT
+// Función para configurar el CE level del UE a través del NRSRP y de los umbrales NRSRP del SIB2
+void
+LteUeRrc::judgeEnhancementCoverageLevel(int NRSRP_Reported_value)
+{
+    if (NRSRP_Reported_value < NRSRP_thresholds_first){
+      UE_Judged_CE_level = 2;
+    }
+    else if (NRSRP_Reported_value >=NRSRP_thresholds_first &&
+            NRSRP_Reported_value < NRSRP_thresholds_second){
+      UE_Judged_CE_level = 1;
+    }
+    else if (NRSRP_Reported_value >= NRSRP_thresholds_second){
+      UE_Judged_CE_level = 0;
+    }
 }
 
 void

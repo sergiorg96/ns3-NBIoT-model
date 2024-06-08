@@ -323,9 +323,9 @@ LteEnbMac::GetTypeId()
             .AddAttribute("NumberOfRaPreambles",
                           "how many random access preambles are available for the contention based "
                           "RACH process",
-                          UintegerValue(52),
+                          UintegerValue(48), // Añadido para NB-IoT solo son 48 subportadoras en lugar de 52 en LTE (sin grupo B)
                           MakeUintegerAccessor(&LteEnbMac::m_numberOfRaPreambles),
-                          MakeUintegerChecker<uint8_t>(4, 64))
+                          MakeUintegerChecker<uint8_t>(4, 48)) // Añadido para NB-IoT
             .AddAttribute("PreambleTransMax",
                           "Maximum number of random access preamble transmissions",
                           UintegerValue(50),
@@ -950,6 +950,43 @@ LteEnbMac::DoGetRachConfig() const
     rc.preambleTransMax = m_preambleTransMax;
     rc.raResponseWindowSize = m_raResponseWindowSize;
     rc.connEstFailCount = m_connEstFailCount;
+
+    // Añadido para NB-IoT
+    // Se establecen los valores de los parámetros de la simulación para el mensaje RAR
+    // repetitions
+    rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_0.numRepetitionsPerPreambleAttempt_r13 = 2;
+    rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_1.numRepetitionsPerPreambleAttempt_r13 = 8;
+    rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_2.numRepetitionsPerPreambleAttempt_r13 = 32;
+
+    // maxTransmissionNum
+    rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_0.maxNumPreambleAttempt_r13 = 3;
+    rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_1.maxNumPreambleAttempt_r13 = 3;
+    rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_2.maxNumPreambleAttempt_r13 = 3;
+
+    // periodicity
+    rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_0.periodicity_r13 = 40;
+    rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_1.periodicity_r13 = 160;
+    rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_2.periodicity_r13 = 640;
+
+    // startTime
+    rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_0.startTime_r13 = 8;
+    rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_1.startTime_r13 = 32;
+    rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_2.startTime_r13 = 256;
+
+    // NPDCCH-numRepetitions-RA
+    rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_0.npdcch_numRepetitions_RA_r13 = 4;
+    rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_1.npdcch_numRepetitions_RA_r13 = 32;
+    rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_2.npdcch_numRepetitions_RA_r13 = 256;
+
+    // NPDCCH-startSF-CSS-RA
+    rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_0.npdcch_StartSF_CSS_RA_r13 = 2;
+    rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_1.npdcch_StartSF_CSS_RA_r13 = 2;
+    rc.nprachConfig.nprach_ConfigSIB.nprach_ParametersList.CE_2.npdcch_StartSF_CSS_RA_r13 = 2;
+
+    // NRSRP thresholds
+    rc.nprachConfig.nprach_ConfigSIB.rsrp_ThresholdsPrachInfoList.NRSRP_thresholds_first_value = 3;
+    rc.nprachConfig.nprach_ConfigSIB.rsrp_ThresholdsPrachInfoList.NRSRP_thresholds_second_value = 13;
+
     return rc;
 }
 

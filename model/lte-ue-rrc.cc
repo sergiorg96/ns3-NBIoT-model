@@ -3206,7 +3206,7 @@ LteUeRrc::StartConnection()
     SwitchToState(IDLE_RANDOM_ACCESS);
     // Añadido para NB-IoT
     //m_cmacSapProvider.at(0)->StartContentionBasedRandomAccessProcedure();
-    m_cmacSapProvider->StartContentionBasedRandomAccessProcedure(m_imsi,repetitionOfPreamble_UE,preambleTransmissionAttempt_UE,periodicity_UE,startTime_UE);
+    m_cmacSapProvider.at(0)->StartContentionBasedRandomAccessProcedure(m_imsi,repetitionOfPreamble_UE,preambleTransmissionAttempt_UE,periodicity_UE,startTime_UE);
 
 }
 // Añadido para NB-IoT

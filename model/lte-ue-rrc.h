@@ -785,6 +785,9 @@ class LteUeRrc : public Object
     int NRSRP_thresholds_first;
     int NRSRP_thresholds_second;
 
+    // Variable utilizada para almacenar el CE level cuando es establecido
+    int UE_Judged_CE_level;
+
     // Parámetros de la nueva función StartContentionBasedRandomAccessProcedure con valores para NB-IoT
     int repetitionOfPreamble_UE;          ///< Repetción del preambulo para el UE
     int preambleTransmissionAttempt_UE;   ///< Número máximo de intentos de transmisión del preambulo

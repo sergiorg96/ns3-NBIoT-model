@@ -314,7 +314,7 @@ class LteRrcSap
         enum nprach_CP_Length_r13{us66dot7, us266dot7};
         RSRP_ThresholdsNPRACH_InfoList_NB_r13 rsrp_ThresholdsPrachInfoList_r13;
         NPRACH_ParametersList_NB_r13 NPRACH_ParametersList_r13;
-    ;
+    };
     /// Estructura NprachConfig
     struct NprachConfig{
         NPRACH_ConfigSIB_NB_r13 nprach_ConfigSIB_NB_r13;

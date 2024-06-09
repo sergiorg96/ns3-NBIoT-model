@@ -676,7 +676,7 @@ LteUeMac::RaResponseTimeout(bool contention)
 void 
 LteUeMac::RaResponseTimeout_NB(int repetitionOfPreamble_UE,int preambleTransmissionAttempt_UE,int periodicity_UE,int startTime_UE)
 {
-  NS_LOG_FUNCTION (this << contention);
+  //NS_LOG_FUNCTION (this << contention);
 
   m_waitingForRaResponse = false;
   // 3GPP 36.321 5.1.4

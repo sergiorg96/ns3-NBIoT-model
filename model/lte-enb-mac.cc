@@ -339,7 +339,7 @@ LteEnbMac::GetTypeId()
                           MakeUintegerChecker<uint8_t>(2, 10))
             .AddAttribute("ConnEstFailCount",
                           "how many time T300 timer can expire on the same cell",
-                          UintegerValue(1),
+                          UintegerValue(4),
                           MakeUintegerAccessor(&LteEnbMac::m_connEstFailCount),
                           MakeUintegerChecker<uint8_t>(1, 4))
             .AddTraceSource("DlScheduling",

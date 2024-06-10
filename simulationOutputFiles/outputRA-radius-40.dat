@@ -1,0 +1,315 @@
+UE0 Posicion: (20363,17086.6)
+UE1 Posicion: (38577.1,-6110.02)
+UE2 Posicion: (12259.7,15691.7)
+UE3 Posicion: (23952,16771.4)
+UE4 Posicion: (-14698.9,21792.1)
+UE5 Posicion: (2409.79,-210.83)
+UE6 Posicion: (-466.515,-1281.74)
+UE7 Posicion: (-14387.9,1766.62)
+UE8 Posicion: (22377.9,18121.3)
+UE9 Posicion: (14455.1,-9750.09)
+UE10 Posicion: (-29705.1,-17848.6)
+UE11 Posicion: (-34423.5,4226.67)
+UE12 Posicion: (-38253.8,8831.58)
+UE13 Posicion: (2032.24,-12831.1)
+UE14 Posicion: (-35130.6,-17899.9)
+UE15 Posicion: (34165.2,1193.07)
+UE16 Posicion: (25216.3,-23514.6)
+UE17 Posicion: (32268.9,-4535.09)
+UE18 Posicion: (-3931.5,27974.1)
+UE19 Posicion: (22053.4,2707.81)
+UE20 Posicion: (-20933.7,8035.68)
+UE21 Posicion: (12974.4,4467.45)
+UE22 Posicion: (-1131.95,1349)
+UE23 Posicion: (-23290.8,14553.7)
+UE24 Posicion: (-3274.66,16846.7)
+UE25 Posicion: (-16691.1,874.743)
+UE26 Posicion: (8049.65,34866.9)
+UE27 Posicion: (4640.55,-18612.2)
+UE28 Posicion: (2446.78,34990.6)
+UE29 Posicion: (-13307,12409)
+UE30 Posicion: (28073.6,6999.53)
+UE31 Posicion: (8138.43,10416.7)
+UE32 Posicion: (-20876.6,-32147.1)
+UE33 Posicion: (-28966.8,-18100.5)
+UE34 Posicion: (-20286.5,1418.57)
+UE35 Posicion: (-28527.2,-9822.72)
+UE36 Posicion: (-1955.64,37315.8)
+UE37 Posicion: (-11851.5,15169.2)
+UE38 Posicion: (-22303.6,10878.2)
+UE39 Posicion: (-19042.3,17757.2)
+IMSI 6 measured RSRP dbm:-130.418dbm
+IMSI 6 NRSRP reported value:26
+IMSI 6 CE level is: 0
+IMSI 7 measured RSRP dbm:-125.442dbm
+IMSI 7 NRSRP reported value:31
+IMSI 7 CE level is: 0
+IMSI 8 measured RSRP dbm:-145.971dbm
+IMSI 8 NRSRP reported value:11
+IMSI 8 CE level is: 1
+IMSI 23 measured RSRP dbm:-127.661dbm
+IMSI 23 NRSRP reported value:29
+IMSI 23 CE level is: 0
+[RecvRaResponse] Tiempo actual: 305 ms
+IMSI 6 got RAR for RAPID 75, setting T-C-RNTI = 8
+IMSI 6 Tiempo total: 16 ms Tiempo actual: 305 ms
+[RecvRaResponse] Tiempo actual: 305 ms
+IMSI 7 got RAR for RAPID 86, setting T-C-RNTI = 9
+IMSI 7 Tiempo total: 16 ms Tiempo actual: 305 ms
+[RecvRaResponse] Tiempo actual: 305 ms
+IMSI 23 got RAR for RAPID 66, setting T-C-RNTI = 7
+IMSI 23 Tiempo total: 16 ms Tiempo actual: 305 ms
+at 0.303214s /NodeList/10/DeviceList/0/LteUeRrc/ConnectionEstablished UE IMSI 6: connected to CellId 1 with RNTI 8
+at 0.303214s /NodeList/11/DeviceList/0/LteUeRrc/ConnectionEstablished UE IMSI 7: connected to CellId 1 with RNTI 9
+at 0.303214s /NodeList/27/DeviceList/0/LteUeRrc/ConnectionEstablished UE IMSI 23: connected to CellId 1 with RNTI 7
+IMSI 2 measured RSRP dbm:-154.58dbm
+IMSI 2 NRSRP reported value:2
+IMSI 2 CE level is: 2
+IMSI 12 measured RSRP dbm:-153.548dbm
+IMSI 12 NRSRP reported value:3
+IMSI 12 CE level is: 1
+IMSI 17 measured RSRP dbm:-153.497dbm
+IMSI 17 NRSRP reported value:3
+IMSI 17 CE level is: 1
+IMSI 21 measured RSRP dbm:-149.76dbm
+IMSI 21 NRSRP reported value:7
+IMSI 21 CE level is: 1
+IMSI 27 measured RSRP dbm:-153.819dbm
+IMSI 27 NRSRP reported value:3
+IMSI 27 CE level is: 1
+IMSI 28 measured RSRP dbm:-148.404dbm
+IMSI 28 NRSRP reported value:8
+IMSI 28 CE level is: 1
+IMSI 29 measured RSRP dbm:-153.646dbm
+IMSI 29 NRSRP reported value:3
+IMSI 29 CE level is: 1
+IMSI 3 measured RSRP dbm:-148.728dbm
+IMSI 3 NRSRP reported value:8
+IMSI 3 CE level is: 1
+IMSI 4 measured RSRP dbm:-152.065dbm
+IMSI 4 NRSRP reported value:4
+IMSI 4 CE level is: 1
+IMSI 15 measured RSRP dbm:-154.662dbm
+IMSI 15 NRSRP reported value:2
+IMSI 15 CE level is: 2
+IMSI 32 measured RSRP dbm:-145.17dbm
+IMSI 32 NRSRP reported value:11
+IMSI 32 CE level is: 1
+IMSI 1 measured RSRP dbm:-151.237dbm
+IMSI 1 NRSRP reported value:5
+IMSI 1 CE level is: 1
+IMSI 5 measured RSRP dbm:-151.14dbm
+IMSI 5 NRSRP reported value:5
+IMSI 5 CE level is: 1
+IMSI 36 measured RSRP dbm:-152.338dbm
+IMSI 36 NRSRP reported value:4
+IMSI 36 CE level is: 1
+IMSI 39 measured RSRP dbm:-150.64dbm
+IMSI 39 NRSRP reported value:6
+IMSI 39 CE level is: 1
+IMSI 40 measured RSRP dbm:-151.058dbm
+IMSI 40 NRSRP reported value:5
+IMSI 40 CE level is: 1
+IMSI 13 measured RSRP dbm:-154.625dbm
+IMSI 13 NRSRP reported value:2
+IMSI 13 CE level is: 2
+IMSI 34 measured RSRP dbm:-153.415dbm
+IMSI 34 NRSRP reported value:3
+IMSI 34 CE level is: 1
+IMSI 38 measured RSRP dbm:-148.434dbm
+IMSI 38 NRSRP reported value:8
+IMSI 38 CE level is: 1
+IMSI 9 measured RSRP dbm:-151.932dbm
+IMSI 9 NRSRP reported value:5
+IMSI 9 CE level is: 1
+IMSI 24 measured RSRP dbm:-151.521dbm
+IMSI 24 NRSRP reported value:5
+IMSI 24 CE level is: 1
+IMSI 26 measured RSRP dbm:-147.207dbm
+IMSI 26 NRSRP reported value:9
+IMSI 26 CE level is: 1
+IMSI 35 measured RSRP dbm:-148.911dbm
+IMSI 35 NRSRP reported value:8
+IMSI 35 CE level is: 1
+IMSI 14 measured RSRP dbm:-145.019dbm
+IMSI 14 NRSRP reported value:11
+IMSI 14 CE level is: 1
+IMSI 37 measured RSRP dbm:-154.195dbm
+IMSI 37 NRSRP reported value:2
+IMSI 37 CE level is: 2
+IMSI 10 measured RSRP dbm:-147.575dbm
+IMSI 10 NRSRP reported value:9
+IMSI 10 CE level is: 1
+IMSI 19 measured RSRP dbm:-151.766dbm
+IMSI 19 NRSRP reported value:5
+IMSI 19 CE level is: 1
+IMSI 30 measured RSRP dbm:-147.945dbm
+IMSI 30 NRSRP reported value:9
+IMSI 30 CE level is: 1
+IMSI 31 measured RSRP dbm:-151.974dbm
+IMSI 31 NRSRP reported value:5
+IMSI 31 CE level is: 1
+IMSI 20 measured RSRP dbm:-149.68dbm
+IMSI 20 NRSRP reported value:7
+IMSI 20 CE level is: 1
+IMSI 16 measured RSRP dbm:-153.423dbm
+IMSI 16 NRSRP reported value:3
+IMSI 16 CE level is: 1
+IMSI 18 measured RSRP dbm:-153.006dbm
+IMSI 18 NRSRP reported value:3
+IMSI 18 CE level is: 1
+IMSI 25 measured RSRP dbm:-147.437dbm
+IMSI 25 NRSRP reported value:9
+IMSI 25 CE level is: 1
+IMSI 22 measured RSRP dbm:-145.494dbm
+IMSI 22 NRSRP reported value:11
+IMSI 22 CE level is: 1
+IMSI 33 measured RSRP dbm:-154.417dbm
+IMSI 33 NRSRP reported value:2
+IMSI 33 CE level is: 2
+IMSI 11 measured RSRP dbm:-153.541dbm
+IMSI 11 NRSRP reported value:3
+IMSI 11 CE level is: 1
+[RecvRaResponse] Tiempo actual: 1362 ms
+IMSI 34 got RAR for RAPID 87, setting T-C-RNTI = 735
+IMSI 34 Tiempo total: 689 ms Tiempo actual: 1362 ms
+[RecvRaResponse] Tiempo actual: 1362 ms
+IMSI 31 got RAR for RAPID 18, setting T-C-RNTI = 731
+IMSI 31 Tiempo total: 369 ms Tiempo actual: 1362 ms
+[RecvRaResponse] Tiempo actual: 1362 ms
+IMSI 20 got RAR for RAPID 199, setting T-C-RNTI = 741
+IMSI 20 Tiempo total: 369 ms Tiempo actual: 1362 ms
+at 1.36021s /NodeList/38/DeviceList/0/LteUeRrc/ConnectionEstablished UE IMSI 34: connected to CellId 1 with RNTI 735
+at 1.36021s /NodeList/35/DeviceList/0/LteUeRrc/ConnectionEstablished UE IMSI 31: connected to CellId 1 with RNTI 731
+at 1.36021s /NodeList/24/DeviceList/0/LteUeRrc/ConnectionEstablished UE IMSI 20: connected to CellId 1 with RNTI 741
+[RecvRaResponse] Tiempo actual: 1522 ms
+IMSI 14 got RAR for RAPID 5, setting T-C-RNTI = 783
+IMSI 14 Tiempo total: 689 ms Tiempo actual: 1522 ms
+at 1.52021s /NodeList/18/DeviceList/0/LteUeRrc/ConnectionEstablished UE IMSI 14: connected to CellId 1 with RNTI 783
+[RecvRaResponse] Tiempo actual: 1542 ms
+IMSI 11 got RAR for RAPID 66, setting T-C-RNTI = 795
+IMSI 11 Tiempo total: 229 ms Tiempo actual: 1542 ms
+at 1.54021s /NodeList/15/DeviceList/0/LteUeRrc/ConnectionEstablished UE IMSI 11: connected to CellId 1 with RNTI 795
+[RecvRaResponse] Tiempo actual: 2361 ms
+IMSI 10 got RAR for RAPID 84, setting T-C-RNTI = 1522
+IMSI 10 Tiempo total: 1368 ms Tiempo actual: 2361 ms
+at 2.35921s /NodeList/14/DeviceList/0/LteUeRrc/ConnectionEstablished UE IMSI 10: connected to CellId 1 with RNTI 1522
+IMSI 6 measured RSRP dbm:-130.418dbm
+IMSI 6 NRSRP reported value:26
+IMSI 6 CE level is: 0
+[RecvRaResponse] Tiempo actual: 2705 ms
+IMSI 6 got RAR for RAPID 84, setting T-C-RNTI = 1531
+IMSI 6 Tiempo total: 16 ms Tiempo actual: 2705 ms
+at 2.70321s /NodeList/10/DeviceList/0/LteUeRrc/ConnectionEstablished UE IMSI 6: connected to CellId 1 with RNTI 1531
+IMSI 31 measured RSRP dbm:-151.974dbm
+IMSI 31 NRSRP reported value:5
+IMSI 31 CE level is: 1
+IMSI 34 measured RSRP dbm:-153.415dbm
+IMSI 34 NRSRP reported value:3
+IMSI 34 CE level is: 1
+IMSI 11 measured RSRP dbm:-153.541dbm
+IMSI 11 NRSRP reported value:3
+IMSI 11 CE level is: 1
+IMSI 14 measured RSRP dbm:-145.019dbm
+IMSI 14 NRSRP reported value:11
+IMSI 14 CE level is: 1
+IMSI 20 measured RSRP dbm:-149.68dbm
+IMSI 20 NRSRP reported value:7
+IMSI 20 CE level is: 1
+IMSI 10 measured RSRP dbm:-147.575dbm
+IMSI 10 NRSRP reported value:9
+IMSI 10 CE level is: 1
+[RecvRaResponse] Tiempo actual: 4921 ms
+IMSI 19 got RAR for RAPID 114, setting T-C-RNTI = 2529
+IMSI 19 Tiempo total: 3928 ms Tiempo actual: 4921 ms
+at 4.91921s /NodeList/23/DeviceList/0/LteUeRrc/ConnectionEstablished UE IMSI 19: connected to CellId 1 with RNTI 2529
+IMSI 6 measured RSRP dbm:-130.418dbm
+IMSI 6 NRSRP reported value:26
+IMSI 6 CE level is: 0
+[RecvRaResponse] Tiempo actual: 5105 ms
+IMSI 6 got RAR for RAPID 0, setting T-C-RNTI = 2536
+IMSI 6 Tiempo total: 16 ms Tiempo actual: 5105 ms
+at 5.10321s /NodeList/10/DeviceList/0/LteUeRrc/ConnectionEstablished UE IMSI 6: connected to CellId 1 with RNTI 2536
+[RecvRaResponse] Tiempo actual: 5191 ms
+IMSI 38 got RAR for RAPID 54, setting T-C-RNTI = 2543
+IMSI 38 Tiempo total: 4518 ms Tiempo actual: 5191 ms
+at 5.18921s /NodeList/42/DeviceList/0/LteUeRrc/ConnectionEstablished UE IMSI 38: connected to CellId 1 with RNTI 2543
+[RecvRaResponse] Tiempo actual: 6201 ms
+IMSI 37 got RAR for RAPID 188, setting T-C-RNTI = 2883
+IMSI 37 Tiempo total: 5304 ms Tiempo actual: 6201 ms
+at 6.19921s /NodeList/41/DeviceList/0/LteUeRrc/ConnectionEstablished UE IMSI 37: connected to CellId 1 with RNTI 2883
+[RecvRaResponse] Tiempo actual: 6701 ms
+IMSI 24 got RAR for RAPID 179, setting T-C-RNTI = 2973
+IMSI 24 Tiempo total: 6028 ms Tiempo actual: 6701 ms
+at 6.69921s /NodeList/28/DeviceList/0/LteUeRrc/ConnectionEstablished UE IMSI 24: connected to CellId 1 with RNTI 2973
+[RecvRaResponse] Tiempo actual: 6841 ms
+IMSI 17 got RAR for RAPID 179, setting T-C-RNTI = 3249
+IMSI 17 Tiempo total: 6488 ms Tiempo actual: 6841 ms
+at 6.83921s /NodeList/21/DeviceList/0/LteUeRrc/ConnectionEstablished UE IMSI 17: connected to CellId 1 with RNTI 3249
+IMSI 6 measured RSRP dbm:-130.418dbm
+IMSI 6 NRSRP reported value:26
+IMSI 6 CE level is: 0
+[RecvRaResponse] Tiempo actual: 7481 ms
+IMSI 35 got RAR for RAPID 252, setting T-C-RNTI = 3514
+IMSI 35 Tiempo total: 6808 ms Tiempo actual: 7481 ms
+[RecvRaResponse] Tiempo actual: 7481 ms
+IMSI 9 got RAR for RAPID 99, setting T-C-RNTI = 3509
+IMSI 9 Tiempo total: 6808 ms Tiempo actual: 7481 ms
+[RecvRaResponse] Tiempo actual: 7481 ms
+IMSI 18 got RAR for RAPID 234, setting T-C-RNTI = 3513
+IMSI 18 Tiempo total: 6328 ms Tiempo actual: 7481 ms
+[RecvRaResponse] Tiempo actual: 7481 ms
+IMSI 22 got RAR for RAPID 206, setting T-C-RNTI = 3512
+IMSI 22 Tiempo total: 6328 ms Tiempo actual: 7481 ms
+at 7.47921s /NodeList/39/DeviceList/0/LteUeRrc/ConnectionEstablished UE IMSI 35: connected to CellId 1 with RNTI 3514
+at 7.47921s /NodeList/13/DeviceList/0/LteUeRrc/ConnectionEstablished UE IMSI 9: connected to CellId 1 with RNTI 3509
+at 7.47921s /NodeList/22/DeviceList/0/LteUeRrc/ConnectionEstablished UE IMSI 18: connected to CellId 1 with RNTI 3513
+at 7.47921s /NodeList/26/DeviceList/0/LteUeRrc/ConnectionEstablished UE IMSI 22: connected to CellId 1 with RNTI 3512
+[RecvRaResponse] Tiempo actual: 7545 ms
+IMSI 6 got RAR for RAPID 35, setting T-C-RNTI = 3520
+IMSI 6 Tiempo total: 56 ms Tiempo actual: 7545 ms
+at 7.54321s /NodeList/10/DeviceList/0/LteUeRrc/ConnectionEstablished UE IMSI 6: connected to CellId 1 with RNTI 3520
+IMSI 19 measured RSRP dbm:-151.766dbm
+IMSI 19 NRSRP reported value:5
+IMSI 19 CE level is: 1
+[RecvRaResponse] Tiempo actual: 7762 ms
+IMSI 19 got RAR for RAPID 120, setting T-C-RNTI = 3529
+IMSI 19 Tiempo total: 49 ms Tiempo actual: 7762 ms
+at 7.76021s /NodeList/23/DeviceList/0/LteUeRrc/ConnectionEstablished UE IMSI 19: connected to CellId 1 with RNTI 3529
+IMSI 38 measured RSRP dbm:-148.434dbm
+IMSI 38 NRSRP reported value:8
+IMSI 38 CE level is: 1
+[RecvRaResponse] Tiempo actual: 8031 ms
+IMSI 12 got RAR for RAPID 61, setting T-C-RNTI = 3620
+IMSI 12 Tiempo total: 7678 ms Tiempo actual: 8031 ms
+at 8.02921s /NodeList/16/DeviceList/0/LteUeRrc/ConnectionEstablished UE IMSI 12: connected to CellId 1 with RNTI 3620
+[RecvRaResponse] Tiempo actual: 8242 ms
+IMSI 38 got RAR for RAPID 211, setting T-C-RNTI = 3712
+IMSI 38 Tiempo total: 369 ms Tiempo actual: 8242 ms
+at 8.24021s /NodeList/42/DeviceList/0/LteUeRrc/ConnectionEstablished UE IMSI 38: connected to CellId 1 with RNTI 3712
+[RecvRaResponse] Tiempo actual: 8761 ms
+IMSI 2 got RAR for RAPID 212, setting T-C-RNTI = 3844
+IMSI 2 Tiempo total: 7864 ms Tiempo actual: 8761 ms
+at 8.75921s /NodeList/6/DeviceList/0/LteUeRrc/ConnectionEstablished UE IMSI 2: connected to CellId 1 with RNTI 3844
+IMSI 37 measured RSRP dbm:-154.195dbm
+IMSI 37 NRSRP reported value:2
+IMSI 37 CE level is: 2
+IMSI 24 measured RSRP dbm:-151.521dbm
+IMSI 24 NRSRP reported value:5
+IMSI 24 CE level is: 1
+IMSI 17 measured RSRP dbm:-153.497dbm
+IMSI 17 NRSRP reported value:3
+IMSI 17 CE level is: 1
+IMSI 6 measured RSRP dbm:-130.418dbm
+IMSI 6 NRSRP reported value:26
+IMSI 6 CE level is: 0
+IMSI 18 measured RSRP dbm:-153.006dbm
+IMSI 18 NRSRP reported value:3
+IMSI 18 CE level is: 1
+IMSI 35 measured RSRP dbm:-148.911dbm
+IMSI 35 NRSRP reported value:8
+IMSI 35 CE level is: 1
+[RecvRaResponse] Tiempo actual: 9945 ms
+IMSI 6 got RAR for RAPID 65, setting T-C-RNTI = 4265
+IMSI 6 Tiempo total: 56 ms Tiempo actual: 9945 ms
+at 9.94321s /NodeList/10/DeviceList/0/LteUeRrc/ConnectionEstablished UE IMSI 6: connected to CellId 1 with RNTI 4265

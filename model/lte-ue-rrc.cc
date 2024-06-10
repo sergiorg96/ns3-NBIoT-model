@@ -216,7 +216,7 @@ LteUeRrc::GetTypeId()
                 "(i.e., the procedure is deemed as failed if it takes longer than this). "
                 "Standard values: 100ms, 200ms, 300ms, 400ms, 600ms, 1000ms, 1500ms, 2000ms",
                 TimeValue(MilliSeconds(
-                    10000)), // see 3GPP 36.331 UE-TimersAndConstants & RLF-TimersAndConstants
+                    100)), // see 3GPP 36.331 UE-TimersAndConstants & RLF-TimersAndConstants
                 MakeTimeAccessor(&LteUeRrc::m_t300),
                 MakeTimeChecker(MilliSeconds(100), MilliSeconds(2000)))
             .AddAttribute(
@@ -976,7 +976,7 @@ LteUeRrc::DoRecvSystemInformation(LteRrcSap::SystemInformation msg)
 
     if (msg.haveSib2)
     {
-        std::cout <<"[myprint] rnti: " << m_rnti << " state is " << ToString(m_state) << std::endl;
+        //std::cout <<"[SIB2 Recibido] rnti: " << m_rnti << " state is " << ToString(m_state) << std::endl;
         switch (m_state)
         {
         case IDLE_CAMPED_NORMALLY:
@@ -1281,7 +1281,12 @@ LteUeRrc::SynchronizeToStrongestCell()
 
     uint16_t maxRsrpCellId = 0;
     double maxRsrp = -std::numeric_limits<double>::infinity();
-    double minRsrp = -140.0; // Minimum RSRP in dBm a UE can report
+    //double minRsrp = -140.0; // Minimum RSRP in dBm a UE can report
+
+    // Añadido NB-IoT
+    // Se aumenta el límite para entrar en la búsqueda de celda.
+    // Impedia a los UE entrar en CE1 y CE2
+    double minRsrp = -164.0; // Minimum RSRP in dBm a UE can report
 
     for (auto it = m_storedMeasValues.begin(); it != m_storedMeasValues.end(); it++)
     {
@@ -3169,15 +3174,15 @@ LteUeRrc::StartConnection()
     SIB2_parameters ();
 
     // Obtener el valor de NRSRP
-    //std::cout<<"IMSI "<<m_imsi<<" measured RSRP dbm:"<<RSRP_dbm<<"dbm"<<std::endl;
+    std::cout<<"IMSI "<<m_imsi<<" measured RSRP dbm:"<<RSRP_dbm<<"dbm"<<std::endl;
     NS_LOG_INFO("IMSI "<<m_imsi<<" measured RSRP dbm:"<<RSRP_dbm<<"dbm");
     double NRSRP_Reported_value = getNRSRP_Reported_value(RSRP_dbm);
-    //std::cout<<"IMSI "<<m_imsi<<" NRSRP reported value:"<<NRSRP_Reported_value<<std::endl;
+    std::cout<<"IMSI "<<m_imsi<<" NRSRP reported value:"<<NRSRP_Reported_value<<std::endl;
     NS_LOG_INFO("IMSI "<<m_imsi<<" NRSRP reported value:"<<NRSRP_Reported_value);
 
     // Obtener el CE level correspondiente con el NRSRP obtenido
     judgeEnhancementCoverageLevel(NRSRP_Reported_value);
-    //std::cout<<"IMSI "<<m_imsi<<" CE level is: "<<UE_Judged_CE_level<<std::endl;
+    std::cout<<"IMSI "<<m_imsi<<" CE level is: "<<UE_Judged_CE_level<<std::endl;
     NS_LOG_INFO("IMSI "<<m_imsi<<" CE level is: "<<UE_Judged_CE_level);
 
     // Elige la configuración RACH en función del CE level

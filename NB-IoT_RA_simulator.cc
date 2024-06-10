@@ -59,33 +59,38 @@
 
     //LogComponentEnable ("LteEpc", LOG_LEVEL_INFO);
     //LogComponentEnable ("LteEnbPhy", LOG_LEVEL_ALL);
-    LogComponentEnable ("LteEnbMac", LOG_LEVEL_ALL);
+    //LogComponentEnable ("LteEnbMac", LOG_LEVEL_ALL);
     //LogComponentEnable ("LteHelper", LOG_LEVEL_ALL);
     //LogComponentEnable ("EpcHelper", LOG_LEVEL_ALL);
     //LogComponentEnable ("PfFfMacScheduler", LOG_LEVEL_ALL);
-    LogComponentEnable ("LteEnbRrc", LOG_LEVEL_ALL);
-    LogComponentEnable ("LteUeMac", LOG_LEVEL_ALL);
-    LogComponentEnable ("LteUeRrc", LOG_LEVEL_ALL);
+    //LogComponentEnable ("LteEnbRrc", LOG_LEVEL_ALL);
+    //LogComponentEnable ("LteUeMac", LOG_LEVEL_ALL);
+    //LogComponentEnable ("LteUeRrc", LOG_LEVEL_ALL);
     //LogComponentEnable ("LteUePhy", LOG_LEVEL_ALL);
     //LogComponentEnable ("EpcEnbApplication", LOG_LEVEL_ALL);
     //LogComponentEnable ("EpcMme", LOG_LEVEL_ALL);
     //LogComponentEnable ("EpcSgwPgwApplication", LOG_LEVEL_ALL);
     
+
      //number of UE
-    static uint16_t numberOfNodes = 2;
+    static uint16_t numberOfNodes = 20;
     double simTime = 10;//default is 0.1
-    //int radius = 6800;//default is 50
-    double interPacketInterval = 10;
+    int radius = 6800;//default is 50
+    //double interPacketInterval = 10;
     string scheduler = "ns3::PfFfMacScheduler";
+    int distanciaUE = 3000; // Por defecto la distancia mas corta entra en C0
 
     // Command line arguments
     CommandLine cmd;
-    cmd.AddValue("numberOfNodes", "Number of eNodeBs + UE pairs", numberOfNodes);
+    cmd.AddValue("numberOfNodes", "Numero de UEs", numberOfNodes);
+    cmd.AddValue("distanciaUE", "Distancia a la que se encuentran los UE del eNB", distanciaUE);
     cmd.AddValue("simTime", "Total duration of the simulation [s])", simTime);
-    //cmd.AddValue("radius", "Radius of eNBs [m]", radius);
-    cmd.AddValue("interPacketInterval", "Inter ;,abcdehilmoprst- interval [ms])", interPacketInterval);
+    cmd.AddValue("radius", "Parámetro que influye en el radio de localizacion de UEs", radius);
+    //cmd.AddValue("interPacketInterval", "Inter ;,abcdehilmoprst- interval [ms])", interPacketInterval);
     cmd.AddValue("Scheduler", "Scheduler", scheduler);
     cmd.Parse(argc, argv);
+
+    //std::cout<<"Tiempo simulación: "<<simTime<<std::endl;
 
 
     Ptr<LteHelper> lteHelper = CreateObject<LteHelper> ();
@@ -140,18 +145,19 @@
     Ptr<ListPositionAllocator> positionAlloc = CreateObject<ListPositionAllocator> ();
     for (uint16_t i = 0; i < numberOfNodes; i++)
         {
-         /*
+         
         int random_rad = rand() % radius ;
         int random_alpha = rand() % 360;
         double x = random_rad * cos(random_alpha*3.14159265/180);
         double y = random_rad * sin(random_alpha*3.14159265/180);
-        positionAlloc->Add (Vector(x, y, 0));
-        */
+        positionAlloc->Add(Vector(x, y, 0));
+        std::cout<<"UE"<<i<<" Posicion: ("<<x<<","<<y<<")"<<std::endl;
+        
         // CELV0 -> 3000
         // CELV1 -> 30000
-        // CELV2 -> 60000
-
-        positionAlloc->Add (Vector(3000, 0, 0));
+        // CELV2 -> 40000
+        // Posición fija
+        //positionAlloc->Add (Vector(distanciaUE, 0, 0));
         }
 
     MobilityHelper mobility;

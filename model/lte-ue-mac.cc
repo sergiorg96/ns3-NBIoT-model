@@ -599,9 +599,9 @@ LteUeMac::RecvRaResponse(BuildRarListElement_s raResponse)
     //+ 1 is for the raWindowBegin , in LTE, the value is 3,in NB-IoT the value should be 4
     totalSpendTime = nowTime_ms1 - startSendTime +1;
 
-    //std::cout<<"At time: "<<nowTime_ms1+2<<"ms"<<std::endl;
-    //std::cout<<"IMSI "<<UE_IMSI<<" got RAR for RAPID " << (uint32_t) m_raPreambleId << ", setting T-C-RNTI = " << raResponse.m_rnti<<std::endl;
-    //std::cout<<totalSpendTime<<std::endl;
+    std::cout<<"[RecvRaResponse] Tiempo actual: "<<nowTime_ms1+2<<" ms"<<std::endl;
+    std::cout<<"IMSI "<<UE_IMSI<<" got RAR for RAPID " << (uint32_t) m_raPreambleId << ", setting T-C-RNTI = " << raResponse.m_rnti<<std::endl;
+    std::cout<<"IMSI "<<UE_IMSI<<" Tiempo total: "<<totalSpendTime<<" ms Tiempo actual: "<<nowTime_ms1+2<<" ms"<<std::endl;
     // Fin NB-IoT
 
     NS_LOG_INFO("got RAR for RAPID " << (uint32_t)m_raPreambleId
